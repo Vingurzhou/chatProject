@@ -13,9 +13,17 @@ func UserLogin(c *gin.Context) {
 	mobile := c.PostForm("mobile")
 	passwd := c.PostForm("passwd")
 	user, err := userService.Login(mobile, passwd)
-	c.JSON(http.StatusOK, gin.H{
-		"code": 0,
-		"msg":  "密码不正确",
-		"data": "",
-	})
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 0,
+			"msg":  err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 0,
+			"msg":  "",
+			"data": user,
+		})
+	}
 }
