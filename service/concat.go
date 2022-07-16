@@ -3,27 +3,29 @@ package service
 import (
 	"chatProject/model"
 	"errors"
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-type ConcatService struct{}
+type ContactService struct{}
 
-func (service *ConcatService) AddFriend(userid, dstid int64) error {
+func (service *ContactService) AddFriend(userid, dstid int64) error {
+	fmt.Println(userid, dstid)
 	if userid == dstid {
 		return errors.New("不能添加自己为好友啊")
 	}
 	tmp := model.Contact{}
-	DB.Raw("select *from users Where ownerid = ? And dstid = ? And cate = ?", userid, dstid, model.CONCAT_CATE_USER).Scan(&tmp)
+	DB.Raw("select *from contacts Where ownerid = ? And dstobj = ? And cate = ?", userid, dstid, model.CONCAT_CATE_USER).Scan(&tmp)
 	if tmp.Id > 0 {
 		return errors.New("该用户已经被添加过啦")
 	}
 	session := DB.Session(&gorm.Session{})
 	session.Begin()
 
-	e2 := DB.Exec("INSERT INTO users (ownerid,dstobj,cate,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", userid, dstid, model.CONCAT_CATE_USER, time.Now()).Error
-	e3 := DB.Exec("INSERT INTO users (ownerid,dstobj,cate,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", dstid, userid, model.CONCAT_CATE_USER, time.Now()).Error
+	e2 := DB.Exec("INSERT INTO contacts (ownerid,dstobj,cate,createat)  VALUES  (?,?,?,?)", userid, dstid, model.CONCAT_CATE_USER, time.Now()).Error
+	e3 := DB.Exec("INSERT INTO contacts (ownerid,dstobj,cate,createat)  VALUES  (?,?,?,?)", dstid, userid, model.CONCAT_CATE_USER, time.Now()).Error
 	if e2 == nil && e3 == nil {
 		//提交
 		session.Commit()

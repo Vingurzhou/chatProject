@@ -1,14 +1,24 @@
 package ctrl
 
 import (
-	"errors"
+	"chatProject/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
+var contactService service.ContactService
+
 func Addfriend(c *gin.Context) {
-	err := errors.New("")
+
+	userid := c.PostForm("userid")
+	distid := c.PostForm("distid")
+
+	nuserid, _ := strconv.Atoi(userid)
+	ndistid, _ := strconv.Atoi(distid)
+	err := contactService.AddFriend(int64(nuserid), int64(ndistid))
+
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
