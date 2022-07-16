@@ -12,7 +12,6 @@ import (
 type ContactService struct{}
 
 func (service *ContactService) AddFriend(userid, dstid int64) error {
-	fmt.Println(userid, dstid)
 	if userid == dstid {
 		return errors.New("不能添加自己为好友啊")
 	}
@@ -40,18 +39,19 @@ func (service *ContactService) AddFriend(userid, dstid int64) error {
 		}
 	}
 }
-func (service *ContactService) SearchComunity(userId int64) []model.Community {
+func (service *ContactService) SearchFriend(userId int64) []model.User {
 	conconts := make([]model.Contact, 0)
-	comIds := make([]int64, 0)
+	objIds := make([]int64, 0)
 
-	DB.Raw("select *from contacts Where ownerid = ? and cate = ?", userId, model.CONCAT_CATE_COMUNITY).Scan(&conconts)
+	DB.Raw("select *from contacts Where ownerid = ? and cate = ?", userId, model.CONCAT_CATE_USER).Scan(&conconts)
 	for _, v := range conconts {
-		comIds = append(comIds, v.Dstobj)
+		objIds = append(objIds, v.Dstobj)
 	}
-	coms := make([]model.Community, 0)
-	if len(comIds) == 0 {
+	coms := make([]model.User, 0)
+	if len(objIds) == 0 {
 		return coms
 	}
-	// DB.In("id", comIds).Find(&coms)
+	DB.Raw("select *from contacts where id in ?", objIds).Scan(&coms)
+	fmt.Println(coms)
 	return coms
 }

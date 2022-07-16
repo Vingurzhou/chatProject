@@ -11,7 +11,7 @@ import (
 
 func main() {
 	router := gin.Default()
-
+	router.Static("asset", "./asset")
 	router.LoadHTMLGlob("view/**/*")
 	matches, _ := filepath.Glob("view/**/*")
 	for _, s := range matches {

@@ -2,6 +2,7 @@ package ctrl
 
 import (
 	"chatProject/service"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,11 +14,10 @@ var contactService service.ContactService
 func AddFriend(c *gin.Context) {
 
 	userid := c.PostForm("userid")
-	distid := c.PostForm("distid")
-
+	dstid := c.PostForm("dstid")
 	nuserid, _ := strconv.Atoi(userid)
-	ndistid, _ := strconv.Atoi(distid)
-	err := contactService.AddFriend(int64(nuserid), int64(ndistid))
+	ndstid, _ := strconv.Atoi(dstid)
+	err := contactService.AddFriend(int64(nuserid), int64(ndstid))
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -38,11 +38,12 @@ func LoadFriend(c *gin.Context) {
 	userid := c.PostForm("userid")
 
 	nuserid, _ := strconv.Atoi(userid)
-	comunitys := contactService.SearchComunity(int64(nuserid))
-
+	users := contactService.SearchFriend(int64(nuserid))
+	fmt.Println(users)
+	fmt.Println(len(users))
 	c.JSON(http.StatusOK, gin.H{
 		"code":  0,
-		"data":  comunitys,
-		"total": len(comunitys),
+		"rows":  users,
+		"total": len(users),
 	})
 }

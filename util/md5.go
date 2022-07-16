@@ -3,7 +3,6 @@ package util
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"strings"
 )
 
@@ -21,11 +20,8 @@ func MD5Encode(data string) string {
 }
 
 func ValidatePasswd(plainpwd, salt, passwd string) bool {
-	fmt.Println((plainpwd + salt))
-	fmt.Println(passwd)
 	return Md5Encode(plainpwd+salt) == passwd
 }
 func MakePasswd(plainpwd, salt string) string {
-	fmt.Println((plainpwd + salt))
 	return Md5Encode(plainpwd + salt)
 }
