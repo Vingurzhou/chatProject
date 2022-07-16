@@ -67,34 +67,25 @@ func (service *ContactService) CreateCommunity(comm model.Community) (ret model.
 		Ownerid: comm.Ownerid,
 	}
 	// num, err := DB.Count(&com)
-	num := 2
 
-	if num > 5 {
-		err = errors.New("一个用户最多只能创见5个群")
-		return com, err
-	} else {
-		comm.Createat = time.Now()
-		session := DB.Session(&gorm.Session{})
-		session.Begin()
-		// _, err = session.insert(&comm)
-		err = session.Exec("").Error
-		if err != nil {
-			session.Rollback()
-			return com, err
-		}
-		// _, err = session.InsertOne(
-		// 	model.Contact{
-		// 		Ownerid:  comm.Ownerid,
-		// 		Dstobj:   comm.Id,
-		// 		Cate:     model.CONCAT_CATE_COMUNITY,
-		// 		Createat: time.Now(),
-		// 	})
-		err = session.Exec("").Error
-		if err != nil {
-			session.Rollback()
-		} else {
-			session.Commit()
-		}
+	// if num > 5 {
+	// 	err = errors.New("一个用户最多只能创见5个群")
+	// 	return com, err
+	// } else {
+	comm.Createat = time.Now()
+	session := DB.Session(&gorm.Session{})
+	session.Begin()
+	err = DB.Exec("INSERT INTO contacts (ownerid,dstobj,cate,createat)  VALUES  (?,?,?,?)", comm.Ownerid, comm.Id, model.CONCAT_CATE_COMUNITY, time.Now()).Error
+	if err != nil {
+		session.Rollback()
 		return com, err
 	}
+	err = DB.Exec("INSERT INTO contacts (ownerid,dstobj,cate,createat)  VALUES  (?,?,?,?)", comm.Ownerid, comm.Id, model.CONCAT_CATE_COMUNITY, time.Now()).Error
+	if err != nil {
+		session.Rollback()
+	} else {
+		session.Commit()
+	}
+	return com, err
+	// }
 }
