@@ -39,6 +39,7 @@ func (s *UserService) Register(
 	tmp.Createat = time.Now()
 	tmp.Token = fmt.Sprintf("%08d", rand.Int31())
 
-	DB.Exec("")
+	DB.Exec("INSERT INTO users (mobile,passwd,avatar,sex,nickname,salt,online,token,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", tmp.Mobile, tmp.Passwd, tmp.Avatar, tmp.Sex, tmp.Nickname, tmp.Salt, tmp.Online, tmp.Token, tmp.Memo, tmp.Createat)
+	//curl http://127.0.0.1:8000/user/register -d "mobile=19952429930&passwd=123456"
 	return tmp, err
 }

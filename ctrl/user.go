@@ -19,7 +19,7 @@ func UserLogin(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": 0,
+			"code": -1,
 			"msg":  err.Error(),
 		})
 	} else {
@@ -42,7 +42,7 @@ func UserRegister(c *gin.Context) {
 	user, err := userService.Register(mobile, plainpwd, nickname, avatar, sex)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": 0,
+			"code": -1,
 			"msg":  err.Error(),
 		})
 	} else {
