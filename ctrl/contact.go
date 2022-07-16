@@ -1,8 +1,8 @@
 package ctrl
 
 import (
+	"chatProject/model"
 	"chatProject/service"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -39,11 +39,29 @@ func LoadFriend(c *gin.Context) {
 
 	nuserid, _ := strconv.Atoi(userid)
 	users := contactService.SearchFriend(int64(nuserid))
-	fmt.Println(users)
-	fmt.Println(len(users))
 	c.JSON(http.StatusOK, gin.H{
 		"code":  0,
 		"rows":  users,
 		"total": len(users),
 	})
+}
+
+func CreateCommunity(c *gin.Context) {
+
+	arg := model.Community{}
+
+	com, err := contactService.CreateCommunity(arg)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 0,
+			"msg":  "",
+			"data": com,
+		})
+	}
+
 }

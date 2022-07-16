@@ -25,6 +25,7 @@ func main() {
 	router.POST("/user/register", ctrl.UserRegister)
 	router.POST("/contact/addfriend", ctrl.AddFriend)
 	router.POST("/contact/loadfriend", ctrl.LoadFriend)
+	router.POST("/contact/createcommunity", ctrl.CreateCommunity)
 
 	router.Run(":8000")
 }
