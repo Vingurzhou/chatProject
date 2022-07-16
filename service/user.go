@@ -31,15 +31,11 @@ func (s *UserService) Register(
 		return tmp, errors.New("该手机号已经注册")
 	}
 
-	tmp.Mobile = mobile
-	tmp.Avatar = avatar
-	tmp.Nickname = nickname
-	tmp.Sex = sex
-	tmp.Salt = fmt.Sprintf("%06d", rand.Int31n(10000))
-	tmp.Createat = time.Now()
-	tmp.Token = fmt.Sprintf("%08d", rand.Int31())
+	salt := fmt.Sprintf("%06d", rand.Int31n(10000))
+	creatat := time.Now()
+	token := fmt.Sprintf("%08d", rand.Int31())
 
-	DB.Exec("INSERT INTO users (mobile,passwd,avatar,sex,nickname,salt,online,token,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", tmp.Mobile, tmp.Passwd, tmp.Avatar, tmp.Sex, tmp.Nickname, tmp.Salt, tmp.Online, tmp.Token, tmp.Memo, tmp.Createat)
+	err = DB.Exec("INSERT INTO users (mobile,passwd,avatar,sex,nickname,salt,online,token,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", mobile, tmp.Passwd, avatar, sex, nickname, salt, tmp.Online, token, tmp.Memo, creatat).Error
 	//curl http://127.0.0.1:8000/user/register -d "mobile=19952429930&passwd=123456"
 	return tmp, err
 }

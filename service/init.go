@@ -17,7 +17,7 @@ func init() {
 		log.Fatal(err.Error())
 	}
 	DB = db
-	// DB.AutoMigrate(model.User{})
+	// DB.AutoMigrate(model.User{}, model.Contact{})
 
 	fmt.Println("init data base ok")
 }

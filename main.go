@@ -23,6 +23,7 @@ func main() {
 
 	router.POST("/user/login", ctrl.UserLogin)
 	router.POST("/user/register", ctrl.UserRegister)
+	router.POST("/contact/addfriend", ctrl.Addfriend)
 
 	router.Run(":8000")
 }
