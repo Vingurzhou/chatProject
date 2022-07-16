@@ -40,3 +40,18 @@ func (service *ContactService) AddFriend(userid, dstid int64) error {
 		}
 	}
 }
+func (service *ContactService) SearchComunity(userId int64) []model.Community {
+	conconts := make([]model.Contact, 0)
+	comIds := make([]int64, 0)
+
+	DB.Raw("select *from contacts Where ownerid = ? and cate = ?", userId, model.CONCAT_CATE_COMUNITY).Scan(&conconts)
+	for _, v := range conconts {
+		comIds = append(comIds, v.Dstobj)
+	}
+	coms := make([]model.Community, 0)
+	if len(comIds) == 0 {
+		return coms
+	}
+	// DB.In("id", comIds).Find(&coms)
+	return coms
+}

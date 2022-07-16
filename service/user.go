@@ -2,6 +2,7 @@ package service
 
 import (
 	"chatProject/model"
+	"chatProject/util"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -17,6 +18,13 @@ func (s *UserService) Login(mobile, plainpwd string) (user model.User, err error
 	if tmp.Id == 0 {
 		return tmp, errors.New("该用户不存在")
 	}
+	if !util.ValidatePasswd(plainpwd, tmp.Salt, tmp.Passwd) {
+		return tmp, errors.New("密码不正确")
+	}
+	str := fmt.Sprintf("%d", time.Now().Unix())
+	token := util.MD5Encode(str)
+
+	DB.Exec("UPDATE users SET token = ? WHERE id= ? ", token, tmp.Id)
 	return tmp, nil
 }
 func (s *UserService) Register(
@@ -26,7 +34,10 @@ func (s *UserService) Register(
 	avatar, sex string) (user model.User, err error) {
 
 	tmp := model.User{}
-	DB.Raw("select *from users where mobile = ?", mobile).Scan(&tmp)
+	err = DB.Raw("select *from users where mobile = ?", mobile).Scan(&tmp).Error
+	if err != nil {
+		return tmp, err
+	}
 	if tmp.Id > 0 {
 		return tmp, errors.New("该手机号已经注册")
 	}

@@ -10,7 +10,7 @@ import (
 
 var contactService service.ContactService
 
-func Addfriend(c *gin.Context) {
+func AddFriend(c *gin.Context) {
 
 	userid := c.PostForm("userid")
 	distid := c.PostForm("distid")
@@ -31,4 +31,18 @@ func Addfriend(c *gin.Context) {
 			"data": nil,
 		})
 	}
+}
+
+func LoadFriend(c *gin.Context) {
+
+	userid := c.PostForm("userid")
+
+	nuserid, _ := strconv.Atoi(userid)
+	comunitys := contactService.SearchComunity(int64(nuserid))
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":  0,
+		"data":  comunitys,
+		"total": len(comunitys),
+	})
 }
