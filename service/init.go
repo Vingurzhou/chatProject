@@ -1,6 +1,7 @@
 package service
 
 import (
+	"chatProject/model"
 	"fmt"
 	"log"
 
@@ -17,7 +18,7 @@ func init() {
 		log.Fatal(err.Error())
 	}
 	DB = db
-	// DB.AutoMigrate(model.User{}, model.Contact{})
+	DB.AutoMigrate(model.User{}, model.Contact{}, model.Community{})
 
 	fmt.Println("init data base ok")
 }

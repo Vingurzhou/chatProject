@@ -43,10 +43,10 @@ func (s *UserService) Register(
 	}
 
 	salt := fmt.Sprintf("%06d", rand.Int31n(10000))
+	passwd := util.MakePasswd(plainpwd, salt)
 	creatat := time.Now()
 	token := fmt.Sprintf("%08d", rand.Int31())
-
-	err = DB.Exec("INSERT INTO users (mobile,passwd,avatar,sex,nickname,salt,online,token,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", mobile, tmp.Passwd, avatar, sex, nickname, salt, tmp.Online, token, tmp.Memo, creatat).Error
+	err = DB.Exec("INSERT INTO users (mobile,passwd,avatar,sex,nickname,salt,online,token,memo,createat)  VALUES  (?,?,?,?,?,?,?,?,?,?)", mobile, passwd, avatar, sex, nickname, salt, tmp.Online, token, tmp.Memo, creatat).Error
 	//curl http://127.0.0.1:8000/user/register -d "mobile=19952429930&passwd=123456"
 	return tmp, err
 }

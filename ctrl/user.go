@@ -34,7 +34,7 @@ func UserLogin(c *gin.Context) {
 func UserRegister(c *gin.Context) {
 
 	mobile := c.PostForm("mobile")
-	plainpwd := c.PostForm("plainpwd")
+	plainpwd := c.PostForm("passwd")
 	nickname := fmt.Sprintf("user%06d", rand.Int31())
 	avatar := ""
 	sex := model.SEX_UNKNOW
