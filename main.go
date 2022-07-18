@@ -13,6 +13,7 @@ func main() {
 	router := gin.Default()
 	router.Static("asset", "./asset")
 	router.LoadHTMLGlob("view/**/*")
+
 	matches, _ := filepath.Glob("view/**/*")
 	for _, s := range matches {
 		newS := strings.Replace(strings.Replace(s, ".html", ".shtml", -1), "view", "", -1)
@@ -26,6 +27,10 @@ func main() {
 	router.POST("/contact/addfriend", ctrl.AddFriend)
 	router.POST("/contact/loadfriend", ctrl.LoadFriend)
 	router.POST("/contact/createcommunity", ctrl.CreateCommunity)
+	router.POST("/contact/loadcommunity", ctrl.LoadCommunity)
+	router.POST("/contact/joincommunity", ctrl.JoinCommunity)
+	router.POST("/chat", ctrl.Chat)
+	router.POST("/attach/upload", ctrl.Upload)
 
 	router.Run(":8000")
 }

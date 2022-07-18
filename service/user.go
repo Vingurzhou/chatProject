@@ -50,3 +50,12 @@ func (s *UserService) Register(
 	//curl http://127.0.0.1:8000/user/register -d "mobile=19952429930&passwd=123456"
 	return tmp, err
 }
+
+func (s *UserService) Find(
+	userId int64) (user model.User) {
+
+	//首先通过手机号查询用户
+	tmp := model.User{}
+	DB.Raw("select *from users where id = ?", userId).Scan(&tmp)
+	return tmp
+}
